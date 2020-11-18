@@ -12,7 +12,7 @@ namespace GerenciadorCondominios.BLL.Models
         public StatusServico Status { get; set; }
         public string UsuarioId { get; set; }
         public virtual Usuario Usuario { get; set; }
-        public ICollection<ServicoPredio> ServicoPredios { get; set; }
+        public virtual ICollection<ServicoPredio> ServicoPredios { get; set; }
     }
 
     public enum StatusServico

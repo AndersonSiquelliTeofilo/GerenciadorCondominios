@@ -25,6 +25,6 @@ namespace GerenciadorCondominios.BLL.Models
         public string Placa { get; set; }
         
         public string UsuarioId { get; set; }
-        public Usuario Usuario { get; set; }
+        public virtual Usuario Usuario { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace GerenciadorCondominios.BLL.Models
         
         [Display(Name = "Mês")]
         public int MesId { get; set; }
-        public Mes Mes { get; set; }
+        public virtual Mes Mes { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Range(2020, 2030, ErrorMessage = "Valor inválido")]

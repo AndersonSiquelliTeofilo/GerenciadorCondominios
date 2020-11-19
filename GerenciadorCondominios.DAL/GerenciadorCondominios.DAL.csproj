@@ -6,8 +6,12 @@
 
   <ItemGroup>
     <Folder Include="Interfaces\" />
-    <Folder Include="Mapeamentos\" />
     <Folder Include="Repositorios\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.2" />
   </ItemGroup>
 
   <ItemGroup>

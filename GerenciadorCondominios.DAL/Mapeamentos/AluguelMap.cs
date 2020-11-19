@@ -7,7 +7,7 @@ using System.Text;
 
 namespace GerenciadorCondominios.DAL.Mapeamentos
 {
-    public class AlguelMap : IEntityTypeConfiguration<Aluguel>
+    public class AluguelMap : IEntityTypeConfiguration<Aluguel>
     {
         public void Configure(EntityTypeBuilder<Aluguel> builder)
         {

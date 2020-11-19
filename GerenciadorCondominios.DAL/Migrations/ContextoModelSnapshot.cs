@@ -57,7 +57,6 @@ namespace GerenciadorCondominios.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MoradorId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Numero")
@@ -137,24 +136,24 @@ namespace GerenciadorCondominios.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f97e07cf-de0d-4a27-bd9c-24122392d439",
-                            ConcurrencyStamp = "5f82d0bc-7ef4-4218-ba63-bf83ace8b3f3",
+                            Id = "34b91146-1639-49dd-980d-b6260aec6f8c",
+                            ConcurrencyStamp = "df336e38-98a9-4e2e-8ac1-269c16b4b83c",
                             Descricao = "Morador do Prédio",
                             Name = "Morador",
                             NormalizedName = "MORADOR"
                         },
                         new
                         {
-                            Id = "2fd2adb4-d31a-4ed9-bba2-554c10b95aa3",
-                            ConcurrencyStamp = "c49cffd3-63f3-4681-a04c-3b6b750b4ca4",
+                            Id = "1fa69937-5d31-48f8-a10a-46b7b3695d5c",
+                            ConcurrencyStamp = "edb7c4e9-8e4c-42b7-84f3-18e4826a2416",
                             Descricao = "Sindico do Prédio",
                             Name = "Sindico",
                             NormalizedName = "SINDICO"
                         },
                         new
                         {
-                            Id = "b2d0a924-3057-45d5-b51e-6337704eb0fd",
-                            ConcurrencyStamp = "887c00a1-fb1b-45e7-a937-75eb81b7736a",
+                            Id = "59bedb03-7aca-4589-a031-cc0b07312475",
+                            ConcurrencyStamp = "1d29cb4c-1f2c-49df-8166-bfcd8b0b3415",
                             Descricao = "Administrador do Prédio",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
@@ -590,13 +589,12 @@ namespace GerenciadorCondominios.DAL.Migrations
                     b.HasOne("GerenciadorCondominios.BLL.Models.Usuario", "Morador")
                         .WithMany("MoradoresApartamentos")
                         .HasForeignKey("MoradorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("GerenciadorCondominios.BLL.Models.Usuario", "Proprietario")
                         .WithMany("ProprietariosApartamentos")
                         .HasForeignKey("ProprietarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 

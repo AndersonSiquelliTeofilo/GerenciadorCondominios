@@ -137,7 +137,7 @@ namespace GerenciadorCondominios.DAL.Migrations
                     Numero = table.Column<int>(nullable: false),
                     Andar = table.Column<int>(nullable: false),
                     Foto = table.Column<string>(nullable: false),
-                    MoradorId = table.Column<string>(nullable: false),
+                    MoradorId = table.Column<string>(nullable: true),
                     ProprietarioId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -147,14 +147,12 @@ namespace GerenciadorCondominios.DAL.Migrations
                         name: "FK_Apartamentos_Usuarios_MoradorId",
                         column: x => x.MoradorId,
                         principalTable: "Usuarios",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Apartamentos_Usuarios_ProprietarioId",
                         column: x => x.ProprietarioId,
                         principalTable: "Usuarios",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -361,9 +359,9 @@ namespace GerenciadorCondominios.DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Descricao", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "f97e07cf-de0d-4a27-bd9c-24122392d439", "5f82d0bc-7ef4-4218-ba63-bf83ace8b3f3", "Morador do Prédio", "Morador", "MORADOR" },
-                    { "2fd2adb4-d31a-4ed9-bba2-554c10b95aa3", "c49cffd3-63f3-4681-a04c-3b6b750b4ca4", "Sindico do Prédio", "Sindico", "SINDICO" },
-                    { "b2d0a924-3057-45d5-b51e-6337704eb0fd", "887c00a1-fb1b-45e7-a937-75eb81b7736a", "Administrador do Prédio", "Administrador", "ADMINISTRADOR" }
+                    { "34b91146-1639-49dd-980d-b6260aec6f8c", "df336e38-98a9-4e2e-8ac1-269c16b4b83c", "Morador do Prédio", "Morador", "MORADOR" },
+                    { "1fa69937-5d31-48f8-a10a-46b7b3695d5c", "edb7c4e9-8e4c-42b7-84f3-18e4826a2416", "Sindico do Prédio", "Sindico", "SINDICO" },
+                    { "59bedb03-7aca-4589-a031-cc0b07312475", "1d29cb4c-1f2c-49df-8166-bfcd8b0b3415", "Administrador do Prédio", "Administrador", "ADMINISTRADOR" }
                 });
 
             migrationBuilder.InsertData(

@@ -18,7 +18,6 @@ namespace GerenciadorCondominios.ViewModels
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public string Telefone { get; set; }
 
-        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public string Foto { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]

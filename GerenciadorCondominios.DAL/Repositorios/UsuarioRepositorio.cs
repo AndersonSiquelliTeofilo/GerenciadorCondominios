@@ -152,7 +152,7 @@ namespace GerenciadorCondominios.DAL.Repositorios
             }
         }
 
-        public async Task<IdentityResult> IncluirUsuariosEmFuncoes(Usuario usuario, IEnumerable<string> funcoes)
+        public async Task<IdentityResult> IncluirUsuarioEmFuncoes(Usuario usuario, IEnumerable<string> funcoes)
         {
             try
             {

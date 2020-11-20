@@ -1,4 +1,4 @@
-﻿function AprovarUsuario(usuarioId, nome) {
+﻿function AprovarUsuarios(usuarioId, nome) {
     const url = "/Usuarios/AprovarUsuario";
 
     $.ajax({
@@ -10,7 +10,7 @@
                 $("#" + usuarioId).removeClass("purple darken-3").addClass("green darken-3").text("Aprovado");
 
                 $("." + usuarioId).children("a").remove();
-                $("." + usuarioId).append('<a class="btn-floating blue darken-4" href="Usuarios/GerenciarUsuarios?usuarioId=' + usuarioId + '&nome=' + nome + '" asp-controller="Usuarios" asp-action="GerenciarUsuario" asp-route-usuarioId="' + usuarioId + '" asp-route-nome="' + nome + '"><i class="material-icons">group</i></a>');
+                $("." + usuarioId).append('<a class="btn-floating blue darken-4" href="Usuarios/GerenciarUsuario?usuarioId=' + usuarioId + '&nome=' + nome + '" asp-controller="Usuarios" asp-action="GerenciarUsuario" asp-route-usuarioId="' + usuarioId + '" asp-route-nome="' + nome + '"><i class="material-icons">group</i></a>');
 
                 M.toast({
                     html: "Usuario aprovado",
@@ -26,7 +26,7 @@
     })
 }
 
-function ReprovarUsuario(usuarioId) {
+function ReprovarUsuarios(usuarioId) {
     const url = "/Usuarios/ReprovarUsuario";
 
     $.ajax({

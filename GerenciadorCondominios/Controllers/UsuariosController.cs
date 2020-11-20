@@ -43,13 +43,13 @@ namespace GerenciadorCondominios.Controllers
             // Certificando dados validos
             if (ModelState.IsValid)
             {
-                if(foto != null)
+                if (foto != null)
                 {
                     string diretorioPasta = Path.Combine(_webHostEnvironment.WebRootPath, "Imagens");
                     // Incluindo a foto com valor único no nome (Guid)
                     string nomeFoto = Guid.NewGuid().ToString() + foto.FileName;
 
-                    using(FileStream fileStream = new FileStream(Path.Combine(diretorioPasta, nomeFoto), FileMode.Create))
+                    using (FileStream fileStream = new FileStream(Path.Combine(diretorioPasta, nomeFoto), FileMode.Create))
                     {
                         await foto.CopyToAsync(fileStream);
                         model.Foto = "~/Imagens/" + nomeFoto;
@@ -60,7 +60,7 @@ namespace GerenciadorCondominios.Controllers
                 IdentityResult usuarioCriado;
 
                 // Criar administrador se for o primeiro cadastro
-                if(_usuarioRepositorio.VerificarSeExisteRegistro() == 0)
+                if (_usuarioRepositorio.VerificarSeExisteRegistro() == 0)
                 {
                     usuario.UserName = model.Nome;
                     usuario.CPF = model.CPF;
@@ -96,7 +96,7 @@ namespace GerenciadorCondominios.Controllers
                 }
                 else
                 {
-                    foreach(IdentityError erro in usuarioCriado.Errors)
+                    foreach (IdentityError erro in usuarioCriado.Errors)
                     {
                         ModelState.AddModelError("", erro.Description);
                     }
@@ -105,7 +105,68 @@ namespace GerenciadorCondominios.Controllers
             }
             return View(model);
         }
-    
+
+        [HttpGet]
+        public async IActionResult Login()
+        {
+            if (User.Identity.IsAuthenticated)
+                await _usuarioRepositorio.DeslogarUsuario();
+            return View();
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Usuario usuario = await _usuarioRepositorio.PegarUsuarioPeloEmail(model.Email);
+
+                if (usuario != null)
+                {
+                    if (usuario.Status == StatusConta.Analisando)
+                    {
+                        return View("Analise", usuario.UserName);
+                    }
+
+                    else if (usuario.Status == StatusConta.Reprovado)
+                    {
+                        return View("Reprovado", usuario.UserName);
+                    }
+
+                    else if (usuario.PrimeiroAcesso == true)
+                    {
+                        return View("RedefinirSenha", usuario);
+                    }
+
+                    else
+                    {
+                        PasswordHasher<Usuario> passwordHasher = new PasswordHasher<Usuario>();
+
+                        if (passwordHasher.VerifyHashedPassword(usuario, usuario.PasswordHash, model.Senha) != PasswordVerificationResult.Failed)
+                        {
+                            await _usuarioRepositorio.LogarUsuario(usuario, false);
+                            return RedirectToAction("Index");
+                        }
+
+                        else
+                        {
+                            ModelState.AddModelError("", "Usuario e/ou senhas inválidos");
+                            return View(model);
+                        }
+                    }
+                }
+
+                else
+                {
+                    ModelState.AddModelError("", "Usuario e/ou senhas inválidos");
+                    return View(model);
+                }
+            }
+
+            return View(model);
+        }
+
         public IActionResult Analise(string nome)
         {
             return View(nome);

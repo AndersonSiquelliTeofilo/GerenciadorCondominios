@@ -138,7 +138,7 @@ namespace GerenciadorCondominios.Controllers
 
                     else if (usuario.PrimeiroAcesso == true)
                     {
-                        return View("RedefinirSenha", usuario);
+                        return RedirectToAction(nameof(RedefinirSenha), usuario);
                     }
 
                     else
@@ -220,7 +220,7 @@ namespace GerenciadorCondominios.Controllers
 
             List<FuncaoUsuarioViewModel> viewModel = new List<FuncaoUsuarioViewModel>();
 
-            foreach(Funcao funcao in await _funcaoRepositorio.PegarTodos())
+            foreach (Funcao funcao in await _funcaoRepositorio.PegarTodos())
             {
                 FuncaoUsuarioViewModel model = new FuncaoUsuarioViewModel()
                 {
@@ -229,7 +229,7 @@ namespace GerenciadorCondominios.Controllers
                     Descricao = funcao.Descricao
                 };
 
-                if(await _usuarioRepositorio.VerificarSeUsuarioEstaEmFuncao(usuario, funcao.Name))
+                if (await _usuarioRepositorio.VerificarSeUsuarioEstaEmFuncao(usuario, funcao.Name))
                 {
                     model.isSelecionado = true;
                 }
@@ -247,7 +247,7 @@ namespace GerenciadorCondominios.Controllers
         public async Task<IActionResult> GerenciarUsuario(List<FuncaoUsuarioViewModel> model)
         {
             string usuarioId = TempData["usuarioId"].ToString();
-            
+
             Usuario usuario = await _usuarioRepositorio.PegarPeloId(usuarioId);
 
             if (usuario == null)
@@ -272,6 +272,108 @@ namespace GerenciadorCondominios.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> MinhasInformacoes()
+        {
+            return View(await _usuarioRepositorio.PegarUsuarioPeloNome(User));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Atualizar(string id)
+        {
+            Usuario usuario = await _usuarioRepositorio.PegarPeloId(id);
+
+            if (usuario == null)
+                return NotFound();
+
+            AtualizarViewModel model = new AtualizarViewModel
+            {
+                UsuarioId = usuario.Id,
+                Nome = usuario.UserName,
+                CPF = usuario.CPF,
+                Email = usuario.Email,
+                Foto = usuario.Foto,
+                Telefone = usuario.PhoneNumber
+            };
+
+            // Para caso o usuário não queira alterar a foto, recupera o camminho com TempData
+            TempData["Foto"] = usuario.Foto;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Atualizar(AtualizarViewModel viewModel, IFormFile foto)
+        {
+            if (ModelState.IsValid)
+            {
+                if (foto != null)
+                {
+                    string diretorioPasta = Path.Combine(_webHostEnvironment.WebRootPath, "Imagens");
+                    // Incluindo a foto com valor único no nome (Guid)
+                    string nomeFoto = Guid.NewGuid().ToString() + foto.FileName;
+
+                    using (FileStream fileStream = new FileStream(Path.Combine(diretorioPasta, nomeFoto), FileMode.Create))
+                    {
+                        await foto.CopyToAsync(fileStream);
+                        viewModel.Foto = "~/Imagens/" + nomeFoto;
+                    }
+                }
+
+                else
+                    viewModel.Foto = TempData["Foto"].ToString();
+
+                Usuario usuario = await _usuarioRepositorio.PegarUsuarioPeloId(viewModel.UsuarioId);
+                usuario.UserName = viewModel.Nome;
+                usuario.CPF = viewModel.CPF;
+                usuario.PhoneNumber = viewModel.Telefone;
+                usuario.Foto = viewModel.Foto;
+                usuario.Email = viewModel.Email;
+
+                await _usuarioRepositorio.AtualizarUsuario(usuario);
+
+                if (await _usuarioRepositorio.VerificarSeUsuarioEstaEmFuncao(usuario, "Administrador") ||
+                    await _usuarioRepositorio.VerificarSeUsuarioEstaEmFuncao(usuario, "Sindico"))
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                else
+                    return RedirectToAction(nameof(MinhasInformacoes));
+            }
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult RedefinirSenha(Usuario usuario)
+        {
+            LoginViewModel model = new LoginViewModel
+            {
+                Email = usuario.Email
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RedefinirSenha(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Usuario usuario = await _usuarioRepositorio.PegarUsuarioPeloEmail(model.Email);
+                model.Senha = _usuarioRepositorio.CodificarSenha(usuario, model.Senha);
+                usuario.PasswordHash = model.Senha;
+                usuario.PrimeiroAcesso = false;
+                await _usuarioRepositorio.AtualizarUsuario(usuario);
+                await _usuarioRepositorio.LogarUsuario(usuario, false);
+
+                return RedirectToAction(nameof(MinhasInformacoes));
+            }
+
+            return View(model);
         }
     }
 }

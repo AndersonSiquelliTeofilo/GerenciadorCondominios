@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -157,6 +158,45 @@ namespace GerenciadorCondominios.DAL.Repositorios
             try
             {
                 return await _gerenciadorUsuarios.AddToRolesAsync(usuario, funcoes);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public async Task<Usuario> PegarUsuarioPeloNome(ClaimsPrincipal usuario)
+        {
+            try
+            {
+                return await _gerenciadorUsuarios.FindByNameAsync(usuario.Identity.Name);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public async Task<Usuario> PegarUsuarioPeloId(string usuarioId)
+        {
+            try
+            {
+                return await _gerenciadorUsuarios.FindByIdAsync(usuarioId);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public string CodificarSenha(Usuario usuario, string senha)
+        {
+            try
+            {
+                return _gerenciadorUsuarios.PasswordHasher.HashPassword(usuario, senha);
             }
             catch (Exception ex)
             {

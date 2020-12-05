@@ -7,6 +7,8 @@
     $(".nome").text(nome);
     const url = "/" + controller + "/Delete"
 
+    debugger;
+
     $(".btnExcluir").on('click', function () {
         $.ajax({
             method: "POST",

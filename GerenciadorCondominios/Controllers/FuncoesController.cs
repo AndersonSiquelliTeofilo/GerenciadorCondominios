@@ -1,5 +1,6 @@
 ﻿using GerenciadorCondominios.BLL.Models;
 using GerenciadorCondominios.DAL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace GerenciadorCondominios.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class FuncoesController : Controller
     {
         private readonly IFuncaoRepositorio _funcaoRepositorio;

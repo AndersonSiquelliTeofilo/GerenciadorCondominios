@@ -15,6 +15,7 @@ namespace GerenciadorCondominios.Extensions
                 opcoes.Cookie.HttpOnly = true; // Acessivel via scripts lado do cliente
                 opcoes.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                 opcoes.LoginPath = "/Usuarios/Login";
+                opcoes.AccessDeniedPath = "/Usuarios/AcessoNegado";
             });
         }
     }

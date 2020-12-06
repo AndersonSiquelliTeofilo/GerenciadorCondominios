@@ -1,5 +1,6 @@
 ﻿using GerenciadorCondominios.BLL.Models;
 using GerenciadorCondominios.DAL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace GerenciadorCondominios.Controllers
 {
+    [Authorize]
     public class VeiculosController : Controller
     {
         private readonly IVeiculoRepositorio _veiculoRepositorio;

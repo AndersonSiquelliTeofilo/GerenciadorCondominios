@@ -1,5 +1,6 @@
 ﻿using GerenciadorCondominios.BLL.Models;
 using GerenciadorCondominios.DAL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace GerenciadorCondominios.Controllers
 {
+    [Authorize(Roles = "Administrador, Sindico")]
     public class ApartamentosController : Controller
     {
         // precisa do web para trabalhar com as fotos

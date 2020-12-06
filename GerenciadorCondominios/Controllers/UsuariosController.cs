@@ -259,6 +259,7 @@ namespace GerenciadorCondominios.Controllers
             if (!resultado.Succeeded)
             {
                 ModelState.AddModelError("", "Não foi possível atualizar as funções do usuário");
+                TempData["Exclusao"] = $"Não foi possível atualizar as funções do usuário {usuario.UserName}";
                 return View("GerenciarUsuario", usuarioId);
             }
 
@@ -268,9 +269,11 @@ namespace GerenciadorCondominios.Controllers
             if (!resultado.Succeeded)
             {
                 ModelState.AddModelError("", "Não foi possível atualizar as funções do usuário");
+                TempData["Exclusao"] = $"Não foi possível atualizar as funções do usuário {usuario.UserName}";
                 return View("GerenciarUsuario", usuarioId);
             }
 
+            TempData["Atualizacao"] = $"As funções do usuário {usuario.UserName} foram atualizadas";
             return RedirectToAction(nameof(Index));
         }
 

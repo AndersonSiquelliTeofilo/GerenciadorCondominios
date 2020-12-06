@@ -127,7 +127,7 @@ namespace GerenciadorCondominios.DAL.Repositorios
             }
         }
 
-        public async Task<IEnumerable<string>> PegarFuncoesUsuario(Usuario usuario)
+        public async Task<IList<string>> PegarFuncoesUsuario(Usuario usuario)
         {
             try
             {

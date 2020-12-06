@@ -26,7 +26,7 @@ namespace GerenciadorCondominios.DAL.Interfaces
         
         Task<bool> VerificarSeUsuarioEstaEmFuncao(Usuario usuario, string funcao);
         
-        Task<IEnumerable<string>> PegarFuncoesUsuario(Usuario usuario);
+        Task<IList<string>> PegarFuncoesUsuario(Usuario usuario);
         
         Task<IdentityResult> RemoverFuncoesUsuario(Usuario usuario, IEnumerable<string> funcoes);
         
